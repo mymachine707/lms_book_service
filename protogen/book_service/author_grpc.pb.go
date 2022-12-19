@@ -4,7 +4,7 @@
 // - protoc             v3.6.1
 // source: lms_proto/book_service/author.proto
 
-package book
+package book_service
 
 import (
 	context "context"

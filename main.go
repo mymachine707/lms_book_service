@@ -2,18 +2,14 @@ package main
 
 import (
 	"fmt"
+	"lms/lms_book_service/config"
+	"lms/lms_book_service/storage"
+	"lms/lms_book_service/storage/postgres"
 	"log"
 	"net"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-
-	"mymachine707/config"
-	eCommerce "mymachine707/protogen/eCommerce"
-	category "mymachine707/services/categorys"
-	products "mymachine707/services/products"
-	"mymachine707/storage"
-	"mymachine707/storage/postgres"
 
 	_ "github.com/lib/pq"
 	"github.com/swaggo/swag/example/basic/docs"
