@@ -1,0 +1,1 @@
+genproto.sh file yengilashimiza kere. 
