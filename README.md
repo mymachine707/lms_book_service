@@ -1,1 +1,1 @@
-genproto.sh file yengilashimiza kere. 
+1. create database book_service in your postgres!
