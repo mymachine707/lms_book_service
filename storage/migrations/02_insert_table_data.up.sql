@@ -68,3 +68,6 @@ INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "IS
 -- Hamlet by William Shakespeare. // Shakespearean tragedy
 -- The Great Gatsby by F. Scott Fizgerald. //  Tragedy
 -- In Search of Lost Time by Marcel Proust // Modernist
+
+
+Select "id","name",	"status","created_at","updated_at" from "author" ('name' ILIKE '%' || 'l' || '%')	LIMIT $2 OFFSET $3 ;

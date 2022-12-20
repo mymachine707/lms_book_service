@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"errors"
+	"fmt"
 	"lms/lms_book_service/protogen/book_service"
 	"time"
 )
@@ -72,7 +73,7 @@ func (stg Postgres) GetCategoryList(offset, limit int, search string) (resp *boo
 		"created_at",
 		"updated_at"
  		from "category" WHERE 
- 		(("name" ILIKE '%' || $1 || '%')
+ 		("title" ILIKE '%' || $1 || '%')
  		LIMIT $2 
 		OFFSET $3`, search, limit, offset)
 
@@ -91,7 +92,7 @@ func (stg Postgres) GetCategoryList(offset, limit int, search string) (resp *boo
 			&a.CreatedAt,
 			&updatedAt,
 		)
-
+		fmt.Println(a)
 		if updatedAt != nil {
 			a.UpdatedAt = *updatedAt
 		}

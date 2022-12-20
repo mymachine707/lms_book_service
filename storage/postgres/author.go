@@ -73,14 +73,15 @@ func (stg Postgres) GetAuthorList(offset, limit int, search string) (resp *book_
 		"status",
 		"created_at",
 		"updated_at"
- 		from "author" WHERE 
- 		(("name" ILIKE '%' || $1 || '%')
+ 		from "author" WHERE ("name" ILIKE '%' || $1 || '%')
  		LIMIT $2 
 		OFFSET $3`, search, limit, offset)
 
 	if err != nil {
 		return resp, err
 	}
+
+	//Select "id","name",	"status","created_at","updated_at" from author Where ('name' ILIKE '%' || 'lad' || '%')	LIMIT 0 OFFSET 10 ;
 
 	for rows.Next() {
 		a := &book_service.Author{}
