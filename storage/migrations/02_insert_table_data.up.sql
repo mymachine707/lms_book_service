@@ -2,16 +2,72 @@
 
 BEGIN;
 
-	INSERT INTO category ("id", "category_name", "description") VALUES ('b9401ecc-e7b7-4e83-b387-eb85072adcd9', 'Burger', 'Buluchka va kaklet' ) ON CONFLICT DO NOTHING;
-	INSERT INTO category ("id", "category_name", "description") VALUES ('1f27a12d-93c7-4272-9eec-43e28a00482d', 'Lavash', 'goshtli fast food' ) ON CONFLICT DO NOTHING;
-	
-	INSERT INTO product ("id", "category_id", "product_name", "description", "price") VALUES ( '3d5ee64f-1810-404f-a804-58f12dd18279', '1f27a12d-93c7-4272-9eec-43e28a00482d', 'Achchiq Lavash', 'katta 25 sm achchiq goshtli lavash', 24000 ) ON CONFLICT DO NOTHING;
-	INSERT INTO product ("id", "category_id", "product_name", "description", "price") VALUES ( 'e6176ddf-4647-4ede-b1ce-1c065224cf84', '1f27a12d-93c7-4272-9eec-43e28a00482d', 'Tovuqli Lavash', 'Ortacha 20 sm tovuq goshtli lavash', 22000 ) ON CONFLICT DO NOTHING;
-	INSERT INTO product ("id", "category_id", "product_name", "description", "price") VALUES ( '611b9c35-5543-4738-b59e-d2bdea847776', '1f27a12d-93c7-4272-9eec-43e28a00482d', 'Kichik Lavash', 'kichik 15 sm goshtli lavash', 20000 ) ON CONFLICT DO NOTHING;
+INSERT INTO "author" ("id", "name") VALUES ('b9a39905-d3d4-4025-8905-21aa625a1aef', 'Leo Tolstoy') ON CONFLICT DO NOTHING;
+INSERT INTO "author" ("id", "name") VALUES ('b9a39905-d3d4-4025-8905-22aa625a1aef', 'Gustav Flaubert') ON CONFLICT DO NOTHING;
+INSERT INTO "author" ("id", "name") VALUES ('b9a39905-d3d4-4025-8905-23aa625a1aef', 'Vladimir Nabokov') ON CONFLICT DO NOTHING;
+INSERT INTO "author" ("id", "name") VALUES ('b9a39905-d3d4-4025-8905-24aa625a1aef', 'Mark Twain') ON CONFLICT DO NOTHING;
+INSERT INTO "author" ("id", "name") VALUES ('b9a39905-d3d4-4025-8905-25aa625a1aef', 'William Shakespeare') ON CONFLICT DO NOTHING;
+INSERT INTO "author" ("id", "name") VALUES ('b9a39905-d3d4-4025-8905-26aa625a1aef', 'F.Scott Fizgerald') ON CONFLICT DO NOTHING;
+INSERT INTO "author" ("id", "name") VALUES ('b9a39905-d3d4-4025-8905-27aa625a1aef', 'Marcel Proust') ON CONFLICT DO NOTHING;
 
-	INSERT INTO product ("id", "category_id", "product_name", "description", "price") VALUES ( '2f1190bb-85f9-4d44-a370-3290a2f23c7c', 'b9401ecc-e7b7-4e83-b387-eb85072adcd9', 'Gamburger', ' Bulchka va 1 ta kakletli', 20000) ON CONFLICT DO NOTHING;
-	INSERT INTO product ("id", "category_id", "product_name", "description", "price") VALUES ( 'fe1491dd-197d-4853-a707-d8c0362c7259', 'b9401ecc-e7b7-4e83-b387-eb85072adcd9', 'Chizburher', 'Bulchka va 1 ta kakletli va sirli', 22000 ) ON CONFLICT DO NOTHING;
-	INSERT INTO product ("id", "category_id", "product_name", "description", "price") VALUES ( '367ca98a-1781-4d0c-96e0-cf173ce24906', 'b9401ecc-e7b7-4e83-b387-eb85072adcd9', 'Dabl Gamburger', 'Bulchka va 2 ta kakletli', 29000 ) ON CONFLICT DO NOTHING;
-	INSERT INTO product ("id", "category_id", "product_name", "description", "price") VALUES ( '4587750c-1903-4a26-bb92-c84d61093629', 'b9401ecc-e7b7-4e83-b387-eb85072adcd9', 'Dabl Chiz', 'Bulchka va 2 ta kakletli va sirli', 33000 ) ON CONFLICT DO NOTHING;
+INSERT INTO "category" ("id", "title") VALUES ('4b19a81c-f4b5-482b-bcc4-7d517a5cfd50', 'Realist novel') ON CONFLICT DO NOTHING;
+INSERT INTO "category" ("id", "title") VALUES ('4b19a81c-f4b5-482b-bcc4-7d527a5cfd50', 'Roman epopeya') ON CONFLICT DO NOTHING;
+INSERT INTO "category" ("id", "title") VALUES ('4b19a81c-f4b5-482b-bcc4-7d537a5cfd50', 'Novel') ON CONFLICT DO NOTHING;
+INSERT INTO "category" ("id", "title") VALUES ('4b19a81c-f4b5-482b-bcc4-7d547a5cfd50', 'Picaresque novel') ON CONFLICT DO NOTHING;
+INSERT INTO "category" ("id", "title") VALUES ('4b19a81c-f4b5-482b-bcc4-7d557a5cfd50', 'Shakespearean tragedy') ON CONFLICT DO NOTHING;
+INSERT INTO "category" ("id", "title") VALUES ('4b19a81c-f4b5-482b-bcc4-7d567a5cfd50', 'Tragedy') ON CONFLICT DO NOTHING;
+INSERT INTO "category" ("id", "title") VALUES ('4b19a81c-f4b5-482b-bcc4-7d577a5cfd50', 'Modernist') ON CONFLICT DO NOTHING;
 
+INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe91-4f8b-8bbe-93cfae5ed381', 'A1') ON CONFLICT DO NOTHING;
+INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe92-4f8b-8bbe-93cfae5ed381', 'B1') ON CONFLICT DO NOTHING;
+INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe93-4f8b-8bbe-93cfae5ed381', 'C1') ON CONFLICT DO NOTHING;
+INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe94-4f8b-8bbe-93cfae5ed381', 'D1') ON CONFLICT DO NOTHING;
+INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe95-4f8b-8bbe-93cfae5ed381', 'E1') ON CONFLICT DO NOTHING;
+INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe96-4f8b-8bbe-93cfae5ed381', 'F1') ON CONFLICT DO NOTHING;
+INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe97-4f8b-8bbe-93cfae5ed381', 'G1') ON CONFLICT DO NOTHING;
 COMMIT;
+
+INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "ISBN", "quantity") VALUES 
+(
+	'433d6ba4-3d1d-4256-80d7-830bd6b30cc1', 'Anna Karenina', 'b9a39905-d3d4-4025-8905-21aa625a1aef', '4b19a81c-f4b5-482b-bcc4-7d517a5cfd50', '1319540f-fe91-4f8b-8bbe-93cfae5ed381',123,10);
+
+INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "ISBN", "quantity") VALUES 
+(
+	'433d6ba4-3d1d-4256-80d7-830bd6b30cc2', 'Madame Bovary', 'b9a39905-d3d4-4025-8905-22aa625a1aef', '4b19a81c-f4b5-482b-bcc4-7d517a5cfd50', '1319540f-fe91-4f8b-8bbe-93cfae5ed381',123,10);
+
+INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "ISBN", "quantity") VALUES 
+(
+	'433d6ba4-3d1d-4256-80d7-830bd6b30cc3', 'War and Peace', 'b9a39905-d3d4-4025-8905-21aa625a1aef', '4b19a81c-f4b5-482b-bcc4-7d527a5cfd50', '1319540f-fe92-4f8b-8bbe-93cfae5ed381',123,10);
+
+INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "ISBN", "quantity") VALUES 
+(
+	'433d6ba4-3d1d-4256-80d7-830bd6b30cc4', 'Lolita', 'b9a39905-d3d4-4025-8905-23aa625a1aef', '4b19a81c-f4b5-482b-bcc4-7d537a5cfd50', '1319540f-fe93-4f8b-8bbe-93cfae5ed381',123,10);
+
+INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "ISBN", "quantity") VALUES 
+(
+	'433d6ba4-3d1d-4256-80d7-830bd6b30cc5', 'The Adventures of Huckleberry Finn', 'b9a39905-d3d4-4025-8905-24aa625a1aef', '4b19a81c-f4b5-482b-bcc4-7d547a5cfd50', '1319540f-fe94-4f8b-8bbe-93cfae5ed381',123,10);
+
+INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "ISBN", "quantity") VALUES 
+(
+	'433d6ba4-3d1d-4256-80d7-830bd6b30cc6', 'Hamlet', 'b9a39905-d3d4-4025-8905-25aa625a1aef', '4b19a81c-f4b5-482b-bcc4-7d557a5cfd50', '1319540f-fe95-4f8b-8bbe-93cfae5ed381',123,10);
+
+INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "ISBN", "quantity") VALUES 
+(
+	'433d6ba4-3d1d-4256-80d7-830bd6b30cc7', 'The Great Gatsby', 'b9a39905-d3d4-4025-8905-26aa625a1aef', '4b19a81c-f4b5-482b-bcc4-7d567a5cfd50', '1319540f-fe96-4f8b-8bbe-93cfae5ed381',123,10);
+
+INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "ISBN", "quantity") VALUES 
+(
+	'433d6ba4-3d1d-4256-80d7-830bd6b30cc8', 'In Search of Lost Time', 'b9a39905-d3d4-4025-8905-27aa625a1aef', '4b19a81c-f4b5-482b-bcc4-7d577a5cfd50', '1319540f-fe97-4f8b-8bbe-93cfae5ed381',123,10);
+
+
+-- Anna Karenina by Leo Tolstoy. // Realist novel
+-- Madame Bovary by Gustav Flaubert. // Realist novel
+-- War and Peace by Leo Tolstoy. // roman epopeya
+-- Lolita by Vladimir Nabokov. // novel
+-- The Adventures of Huckleberry Finn by Mark Twain. //  Picaresque novel
+-- Hamlet by William Shakespeare. // Shakespearean tragedy
+-- The Great Gatsby by F. Scott Fizgerald. //  Tragedy
+-- In Search of Lost Time by Marcel Proust // Modernist
+
+
+Select "id","name",	"status","created_at","updated_at" from "author" ('name' ILIKE '%' || 'l' || '%')	LIMIT $2 OFFSET $3 ;

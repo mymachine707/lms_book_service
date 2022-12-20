@@ -2,37 +2,37 @@ package postgres
 
 import (
 	"errors"
+	"lms/lms_book_service/protogen/book_service"
 	"time"
-
-	// "mymachine707/eCommerce"
-	"mymachine707/protogen/eCommerce"
 )
 
-// AddProduct ...
-func (stg Postgres) AddProduct(id string, entity *eCommerce.CreateProductRequest) error {
-	_, err := stg.GetCategoryByID(entity.CategoryId)
-	if err != nil {
-		return errors.New("This category is not available in the category collection")
-	}
+// AddBook ...
+func (stg Postgres) AddBook(id string, entity *book_service.CreateBookRequest) error {
 
-	_, err = stg.db.Exec(`INSERT INTO product (
+	_, err := stg.db.Exec(`INSERT INTO "book" (
 		"id",
-		"category_id",
-		"product_name",
-		"description",
-		"price"
-		) VALUES (
+		"name",
+		"author_id" ,
+   		"category_id",
+   		"location_id",
+   		"ISBN",
+   		"quantity"
+		) VALUES(
 		$1,
 		$2,
 		$3,
 		$4,
-		$5
-)`,
+		$5,
+		$6,
+		$7
+	)`,
 		id,
+		entity.Name,
+		entity.AuthorId,
 		entity.CategoryId,
-		entity.ProductName,
-		entity.Description,
-		entity.Price,
+		entity.LocationId,
+		entity.ISBN,
+		entity.Quantity,
 	)
 
 	if err != nil {
@@ -42,123 +42,161 @@ func (stg Postgres) AddProduct(id string, entity *eCommerce.CreateProductRequest
 	return nil
 }
 
-// GetProductByID ...  //  ????
-func (stg Postgres) GetProductByID(id string) (*eCommerce.GetProductByIDResponse, error) {
-	// var res eCommerce.GetProductByIDResponse
-	res := &eCommerce.GetProductByIDResponse{
-		Category: &eCommerce.GetProductByIDResponse_Category{},
-	}
+// GetBookByID ...
+func (stg Postgres) GetBookByID(id string) (*book_service.Book, error) {
+	result := &book_service.Book{}
 
-	if id == "" {
-		return res, errors.New("id must exist")
-	}
-
-	var deletedAt *time.Time
-	var updatedAt, categoryUpdatedAt *string
-	err := stg.db.QueryRow(`SELECT 
-    pr."id",
-    pr."product_name",
-    pr."description",
-	pr."price",
-    pr."created_at",
-    pr."updated_at",
-    pr."deleted_at",
-    ca."id",
-    ca."category_name",
-    ca."description",
-    ca."created_at",
-    ca."updated_at"
-FROM "product" AS pr JOIN "category" AS ca ON pr."category_id" = ca."id" WHERE pr."id" = $1`, id).Scan(
-		&res.Id,
-		&res.ProductName,
-		&res.Description,
-		&res.Price,
-		&res.CreatedAt,
+	var updatedAt *time.Time
+	err := stg.db.QueryRow(`SELECT
+		"id",
+		"name",
+		"author_id" ,
+   		"category_id",
+   		"location_id",
+   		"ISBN",
+   		"quantity",
+		"status",
+		"created_at",
+		"updated_at"
+	FROM "book" WHERE id=$1`, id).Scan(
+		&result.Id,
+		&result.Name,
+		&result.AuthorId,
+		&result.CategoryId,
+		&result.LocationId,
+		&result.ISBN,
+		&result.Status,
+		&result.CreatedAt, // !
 		&updatedAt,
-		&deletedAt,
-		&res.Category.Id,
-		&res.Category.CategoryName,
-		&res.Category.Description,
-		&res.Category.CreatedAt,
-		&categoryUpdatedAt,
 	)
 
 	if err != nil {
-		return res, err
+		return result, err
 	}
 
 	if updatedAt != nil {
-		res.UpdatedAt = *updatedAt
+		result.UpdatedAt = updatedAt.String()
 	}
 
-	if categoryUpdatedAt != nil {
-		res.Category.UpdatedAt = *categoryUpdatedAt
-	}
-
-	if deletedAt != nil {
-		return res, errors.New("We do not have this product!")
-	}
-
-	return res, err
+	return result, nil
 }
 
-// GetProductList ...
-func (stg Postgres) GetProductList(offset, limit int, search string) (*eCommerce.GetProductListResponse, error) {
+// GetBookList ...
+func (stg Postgres) GetBookList(offset, limit int, search string) (resp *book_service.GetBookListResponse, err error) {
 
-	resp := &eCommerce.GetProductListResponse{
-		Products: make([]*eCommerce.Product, 0),
+	resp = &book_service.GetBookListResponse{
+		Books: make([]*book_service.Book, 0),
 	}
 
 	rows, err := stg.db.Queryx(`
-	SELECT * FROM product WHERE 
-	(product_name || ' ' || description ILIKE '%' || $1 || '%') AND "deleted_at" is null
-	LIMIT $2
-	OFFSET $3
-	`, search, limit, offset)
+	Select 
+		"id",
+		"name",
+		"author_id" ,
+   		"category_id",
+   		"location_id",
+   		"ISBN",
+   		"quantity",
+		"status",
+		"created_at",
+		"updated_at"
+ 		from "book" WHERE 
+ 		("name" ILIKE '%' || $1 || '%')
+ 		LIMIT $2 
+		OFFSET $3`, search, limit, offset)
 
 	if err != nil {
 		return resp, err
 	}
 
 	for rows.Next() {
-		a := &eCommerce.Product{}
+		a := &book_service.Book{}
+		var updatedAt *string
 
-		var updatedAt, deletedAt *string
-		err := rows.Scan(
+		err = rows.Scan(
 			&a.Id,
+			&a.Name,
+			&a.AuthorId,
 			&a.CategoryId,
-			&a.ProductName,
-			&a.Description,
-			&a.Price,
+			&a.LocationId,
+			&a.ISBN,
+			&a.Quantity,
+			&a.Status,
 			&a.CreatedAt,
 			&updatedAt,
-			&deletedAt,
 		)
+
+		if updatedAt != nil {
+			a.UpdatedAt = *updatedAt
+		}
 
 		if err != nil {
 			return resp, err
 		}
 
-		resp.Products = append(resp.Products, a)
+		resp.Books = append(resp.Books, a)
+
 	}
 
-	return resp, err
+	return resp, nil
 }
 
-// UpdateProduct ...
-func (stg Postgres) UpdateProduct(product *eCommerce.UpdateProductRequest) error {
+// DeleteBook ...
+func (stg Postgres) DeleteBook(idStr string) error {
+	rows, err := stg.db.Exec(`UPDATE "book" SET "updated_at"=now(),"status"='disabled' Where id=$1 and "status"='enabled'`, idStr)
 
-	res, err := stg.db.NamedExec(`UPDATE product SET "description"=:d, "price"=:p, "updated_at"=now() WHERE "id"=:id AND "deleted_at" is null`, map[string]interface{}{
-		"id": product.Id,
-		"d":  product.Description,
-		"p":  product.Price,
+	if err != nil {
+		return err
+	}
+
+	n, err := rows.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if n > 0 {
+		return nil
+	}
+
+	return errors.New("Cannot delete Book becouse 'status'='disabled'")
+}
+
+// EnabledBook ...
+func (stg Postgres) EnabledBook(idStr string) error {
+	rows, err := stg.db.Exec(`UPDATE "book" SET "updated_at"=now(),"status"='enabled' Where id=$1 and "status"='disabled'`, idStr)
+
+	if err != nil {
+		return err
+	}
+
+	n, err := rows.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if n > 0 {
+		return nil
+	}
+
+	return errors.New("Cannot enabled Book becouse 'status'='enabled'")
+}
+
+// UpdateBook ...
+func (stg Postgres) UpdateBook(book *book_service.UpdateBookRequest) error {
+
+	rows, err := stg.db.NamedExec(`Update "book" set "quantity"=:q, "location_id"=:l, "updated_at"=now() Where "id"=:id and "status"='enabled'`, map[string]interface{}{
+		"id": book.Id,
+		"q":  book.Quantity,
+		"l":  book.LocationId,
 	})
 
 	if err != nil {
 		return err
 	}
 
-	n, err := res.RowsAffected()
+	n, err := rows.RowsAffected()
 
 	if err != nil {
 		return err
@@ -168,27 +206,5 @@ func (stg Postgres) UpdateProduct(product *eCommerce.UpdateProductRequest) error
 		return nil
 	}
 
-	return errors.New("product not found")
-}
-
-// DeleteProduct ...
-func (stg Postgres) DeleteProduct(idStr string) error {
-
-	res, err := stg.db.Exec(`UPDATE product Set "deleted_at"=now() WHERE id=$1 AND "deleted_at" is null`, idStr)
-
-	if err != nil {
-		return err
-	}
-
-	n, err := res.RowsAffected()
-
-	if err != nil {
-		return err
-	}
-
-	if n > 0 {
-		return nil
-	}
-
-	return errors.New("product not found")
+	return errors.New("Cannot update Book becouse 'status'='disabled'")
 }

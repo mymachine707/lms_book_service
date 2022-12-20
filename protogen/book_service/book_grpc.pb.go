@@ -4,7 +4,7 @@
 // - protoc             v3.6.1
 // source: lms_proto/book_service/book.proto
 
-package book
+package book_service
 
 import (
 	context "context"
@@ -25,6 +25,7 @@ type BookServiceClient interface {
 	CreateBook(ctx context.Context, in *CreateBookRequest, opts ...grpc.CallOption) (*Book, error)
 	UpdateBook(ctx context.Context, in *UpdateBookRequest, opts ...grpc.CallOption) (*UpdateBookResponse, error)
 	DeleteBook(ctx context.Context, in *DeleteBookRequest, opts ...grpc.CallOption) (*DeleteBookResponse, error)
+	EnabledBook(ctx context.Context, in *EnabledBookRequest, opts ...grpc.CallOption) (*EnabledBookResponse, error)
 	GetBookList(ctx context.Context, in *GetBookListRequest, opts ...grpc.CallOption) (*GetBookListResponse, error)
 	GetBookById(ctx context.Context, in *GetBookByIDRequest, opts ...grpc.CallOption) (*Book, error)
 }
@@ -64,6 +65,15 @@ func (c *bookServiceClient) DeleteBook(ctx context.Context, in *DeleteBookReques
 	return out, nil
 }
 
+func (c *bookServiceClient) EnabledBook(ctx context.Context, in *EnabledBookRequest, opts ...grpc.CallOption) (*EnabledBookResponse, error) {
+	out := new(EnabledBookResponse)
+	err := c.cc.Invoke(ctx, "/BookService/EnabledBook", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *bookServiceClient) GetBookList(ctx context.Context, in *GetBookListRequest, opts ...grpc.CallOption) (*GetBookListResponse, error) {
 	out := new(GetBookListResponse)
 	err := c.cc.Invoke(ctx, "/BookService/GetBookList", in, out, opts...)
@@ -89,6 +99,7 @@ type BookServiceServer interface {
 	CreateBook(context.Context, *CreateBookRequest) (*Book, error)
 	UpdateBook(context.Context, *UpdateBookRequest) (*UpdateBookResponse, error)
 	DeleteBook(context.Context, *DeleteBookRequest) (*DeleteBookResponse, error)
+	EnabledBook(context.Context, *EnabledBookRequest) (*EnabledBookResponse, error)
 	GetBookList(context.Context, *GetBookListRequest) (*GetBookListResponse, error)
 	GetBookById(context.Context, *GetBookByIDRequest) (*Book, error)
 	mustEmbedUnimplementedBookServiceServer()
@@ -106,6 +117,9 @@ func (UnimplementedBookServiceServer) UpdateBook(context.Context, *UpdateBookReq
 }
 func (UnimplementedBookServiceServer) DeleteBook(context.Context, *DeleteBookRequest) (*DeleteBookResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBook not implemented")
+}
+func (UnimplementedBookServiceServer) EnabledBook(context.Context, *EnabledBookRequest) (*EnabledBookResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EnabledBook not implemented")
 }
 func (UnimplementedBookServiceServer) GetBookList(context.Context, *GetBookListRequest) (*GetBookListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBookList not implemented")
@@ -180,6 +194,24 @@ func _BookService_DeleteBook_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BookService_EnabledBook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnabledBookRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookServiceServer).EnabledBook(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/BookService/EnabledBook",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookServiceServer).EnabledBook(ctx, req.(*EnabledBookRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _BookService_GetBookList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetBookListRequest)
 	if err := dec(in); err != nil {
@@ -234,6 +266,10 @@ var BookService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteBook",
 			Handler:    _BookService_DeleteBook_Handler,
+		},
+		{
+			MethodName: "EnabledBook",
+			Handler:    _BookService_EnabledBook_Handler,
 		},
 		{
 			MethodName: "GetBookList",

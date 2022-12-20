@@ -1,125 +1,142 @@
-package products
+package book
 
 import (
 	"context"
 	"fmt"
-	"log"
-	"mymachine707/protogen/eCommerce"
-	"mymachine707/storage"
+	"lms/lms_book_service/protogen/book_service"
+	"lms/lms_book_service/storage"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-type productService struct {
+type bookService struct {
 	stg storage.Interfaces
-	eCommerce.UnimplementedProductServiceServer
+	book_service.UnimplementedBookServiceServer
 }
 
-func NewProductService(stg storage.Interfaces) *productService {
-	return &productService{
+func NewBookService(stg storage.Interfaces) *bookService {
+	return &bookService{
 		stg: stg,
 	}
 }
 
-func (s *productService) Ping(ctx context.Context, req *eCommerce.Empty) (*eCommerce.Pong, error) {
-	log.Println("Ping")
+func (s *bookService) CreateBook(ctx context.Context, req *book_service.CreateBookRequest) (*book_service.Book, error) {
+	fmt.Println("<<< ---- CreateBook ---->>>")
 
-	return &eCommerce.Pong{
-		Message: "Ok",
-	}, nil
-}
-
-func (s *productService) CreateProduct(ctx context.Context, req *eCommerce.CreateProductRequest) (*eCommerce.Product, error) {
-	fmt.Println("<<< ---- CreateProduct ---->>>")
-	// create new product
 	id := uuid.New()
 
-	err := s.stg.AddProduct(id.String(), req)
+	err := s.stg.AddBook(id.String(), req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.AddProduct: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "s.stg.AddBook: %s", err)
 	}
 
-	product, err := s.stg.GetProductByID(id.String()) // maqsad tekshirish rostan  ham create bo'ldimi?
+	book, err := s.stg.GetBookByID(id.String())
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetProductByID: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "s.stg.GetBookByID: %s", err)
 	}
 
-	return &eCommerce.Product{
-		Id:          product.Id,
-		CategoryId:  product.Category.Id,
-		ProductName: product.ProductName,
-		Price:       product.Price,
-		CreatedAt:   product.CreatedAt,
-		UpdatedAt:   product.UpdatedAt,
+	return &book_service.Book{
+		Id:         book.Id,
+		Name:       book.Name,
+		AuthorId:   book.AuthorId,
+		CategoryId: book.CategoryId,
+		LocationId: book.LocationId,
+		ISBN:       book.ISBN,
+		Quantity:   book.Quantity,
+		Status:     book.Status,
+		CreatedAt:  book.CreatedAt,
+		UpdatedAt:  book.UpdatedAt,
 	}, nil
 }
 
-func (s *productService) UpdateProduct(ctx context.Context, req *eCommerce.UpdateProductRequest) (*eCommerce.Product, error) {
-	fmt.Println("<<< ---- UpdateProduct ---->>>")
+func (s *bookService) UpdateBook(ctx context.Context, req *book_service.UpdateBookRequest) (*book_service.UpdateBookResponse, error) {
+	fmt.Println("<<< ---- UpdateBook ---->>>")
 
-	err := s.stg.UpdateProduct(req)
+	err := s.stg.UpdateBook(req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.UpdateProduct: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "s.stg.UpdateBook: %s", err)
 	}
 
-	product, err := s.stg.GetProductByID(req.Id) // maqsad tekshirish rostan  ham create bo'ldimi?
+	book, err := s.stg.GetBookByID(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetProductByID---!: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "s.stg.GetBookByID: %s", err)
 	}
 
-	return &eCommerce.Product{
-		Id:          product.Id,
-		CategoryId:  product.Category.Id,
-		ProductName: product.ProductName,
-		Price:       product.Price,
-		CreatedAt:   product.CreatedAt,
-		UpdatedAt:   product.UpdatedAt,
+	return &book_service.UpdateBookResponse{
+		Id:         book.Id,
+		LocationId: book.LocationId,
+		Quantity:   book.Quantity,
+		UpdatedAt:  book.UpdatedAt,
 	}, nil
 }
 
-func (s *productService) DeleteProduct(ctx context.Context, req *eCommerce.DeleteProductRequest) (*eCommerce.Product, error) {
-	fmt.Println("<<< ---- DeleteProduct ---- >>>")
+func (s *bookService) DeleteBook(ctx context.Context, req *book_service.DeleteBookRequest) (*book_service.DeleteBookResponse, error) {
+	fmt.Println("<<< ---- DeleteBook ---->>>")
 
-	product, err := s.stg.GetProductByID(req.Id) // maqsad tekshirish rostan  ham create bo'ldimi?
+	book, err := s.stg.GetBookByID(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetProductByID: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "s.stg.GetBookByID: %s", err)
 	}
 
-	err = s.stg.DeleteProduct(req.Id)
+	err = s.stg.DeleteBook(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.DeleteProduct: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "s.stg.DeleteBook: %s", err)
 	}
 
-	return &eCommerce.Product{
-		Id:          product.Id,
-		CategoryId:  product.Category.Id,
-		ProductName: product.ProductName,
-		Price:       product.Price,
-		CreatedAt:   product.CreatedAt,
-		UpdatedAt:   product.UpdatedAt,
+	return &book_service.DeleteBookResponse{
+		Status: book.Status,
 	}, nil
 }
 
-func (s *productService) GetProductList(ctx context.Context, req *eCommerce.GetProductListRequest) (*eCommerce.GetProductListResponse, error) {
-	fmt.Println("<<< ---- GetProductList ---->>>")
+func (s *bookService) EnabledBook(ctx context.Context, req *book_service.EnabledBookRequest) (*book_service.EnabledBookResponse, error) {
+	fmt.Println("<<< ---- EnabledBook ---->>>")
 
-	res, err := s.stg.GetProductList(int(req.Offset), int(req.Limit), req.Search)
+	book, err := s.stg.GetBookByID(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetProductList: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "s.stg.GetBookByID: %s", err)
+	}
+
+	err = s.stg.EnabledBook(req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "s.stg.EnabledBook: %s", err)
+	}
+
+	return &book_service.EnabledBookResponse{
+		Status: book.Status,
+	}, nil
+}
+
+func (s *bookService) GetBookList(ctx context.Context, req *book_service.GetBookListRequest) (*book_service.GetBookListResponse, error) {
+	fmt.Println("<<< ---- GetBookList ---->>>")
+
+	res, err := s.stg.GetBookList(int(req.Offset), int(req.Limit), req.Search)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "s.stg.GetBookList: %s", err)
 	}
 
 	return res, nil
 }
 
-func (s *productService) GetProductById(ctx context.Context, req *eCommerce.GetProductByIDRequest) (*eCommerce.GetProductByIDResponse, error) {
-	fmt.Println("<<< ---- GetProductById ---->>>")
+func (s *bookService) GetBookById(ctx context.Context, req *book_service.GetBookByIDRequest) (*book_service.Book, error) {
+	fmt.Println("<<< ---- GetBookById ---->>>")
 
-	product, err := s.stg.GetProductByID(req.Id)
+	book, err := s.stg.GetBookByID(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetProductByID: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "s.stg.GetBookByID: %s", err)
 	}
 
-	return product, nil
+	return &book_service.Book{
+		Id:         book.Id,
+		Name:       book.Name,
+		AuthorId:   book.AuthorId,
+		CategoryId: book.CategoryId,
+		LocationId: book.LocationId,
+		ISBN:       book.ISBN,
+		Quantity:   book.Quantity,
+		Status:     book.Status,
+		CreatedAt:  book.CreatedAt,
+		UpdatedAt:  book.UpdatedAt,
+	}, nil
 }
