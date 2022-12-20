@@ -1,18 +1,39 @@
-ALTER TABLE product DROP CONSTRAINT IF EXISTS fk_product_category;
-
 BEGIN;
 
-	DELETE FROM product where id='3d5ee64f-1810-404f-a804-58f12dd18279';
-	DELETE FROM product where id='e6176ddf-4647-4ede-b1ce-1c065224cf84';
-	DELETE FROM product where id='611b9c35-5543-4738-b59e-d2bdea847776';
-
-	DELETE FROM product where id='2f1190bb-85f9-4d44-a370-3290a2f23c7c';
-	DELETE FROM product where id='fe1491dd-197d-4853-a707-d8c0362c7259';
-	DELETE FROM product where id='367ca98a-1781-4d0c-96e0-cf173ce24906';
-	DELETE FROM product where id='4587750c-1903-4a26-bb92-c84d61093629';
-
-	DELETE FROM category where id='b9401ecc-e7b7-4e83-b387-eb85072adcd9';
-	DELETE FROM category where id='1f27a12d-93c7-4272-9eec-43e28a00482d';
+	DELETE FROM "book" WHERE id = '433d6ba4-3d1d-4256-80d7-830bd6b30cc1';
+	DELETE FROM "book" WHERE id = '433d6ba4-3d1d-4256-80d7-830bd6b30cc2';
+	DELETE FROM "book" WHERE id = '433d6ba4-3d1d-4256-80d7-830bd6b30cc3';
+	DELETE FROM "book" WHERE id = '433d6ba4-3d1d-4256-80d7-830bd6b30cc4';
+	DELETE FROM "book" WHERE id = '433d6ba4-3d1d-4256-80d7-830bd6b30cc5';
+	DELETE FROM "book" WHERE id = '433d6ba4-3d1d-4256-80d7-830bd6b30cc6';
+	DELETE FROM "book" WHERE id = '433d6ba4-3d1d-4256-80d7-830bd6b30cc7';
+	DELETE FROM "book" WHERE id = '433d6ba4-3d1d-4256-80d7-830bd6b30cc8';
 	
+	DELETE FROM "author" WHERE id='b9a39905-d3d4-4025-8905-21aa625a1aef';
+	DELETE FROM "author" WHERE id='b9a39905-d3d4-4025-8905-22aa625a1aef';
+	DELETE FROM "author" WHERE id='b9a39905-d3d4-4025-8905-23aa625a1aef';
+	DELETE FROM "author" WHERE id='b9a39905-d3d4-4025-8905-24aa625a1aef';
+	DELETE FROM "author" WHERE id='b9a39905-d3d4-4025-8905-25aa625a1aef';
+	DELETE FROM "author" WHERE id='b9a39905-d3d4-4025-8905-26aa625a1aef';
+	DELETE FROM "author" WHERE id='b9a39905-d3d4-4025-8905-27aa625a1aef';
+
+	DELETE FROM "category" WHERE id='4b19a81c-f4b5-482b-bcc4-7d517a5cfd50';
+	DELETE FROM "category" WHERE id='4b19a81c-f4b5-482b-bcc4-7d527a5cfd50';
+	DELETE FROM "category" WHERE id='4b19a81c-f4b5-482b-bcc4-7d537a5cfd50';
+	DELETE FROM "category" WHERE id='4b19a81c-f4b5-482b-bcc4-7d547a5cfd50';
+	DELETE FROM "category" WHERE id='4b19a81c-f4b5-482b-bcc4-7d557a5cfd50';
+	DELETE FROM "category" WHERE id='4b19a81c-f4b5-482b-bcc4-7d567a5cfd50';
+	DELETE FROM "category" WHERE id='4b19a81c-f4b5-482b-bcc4-7d577a5cfd50';
+
+	DELETE FROM "location" WHERE id='1319540f-fe91-4f8b-8bbe-93cfae5ed381';
+	DELETE FROM "location" WHERE id='1319540f-fe92-4f8b-8bbe-93cfae5ed381';
+	DELETE FROM "location" WHERE id='1319540f-fe93-4f8b-8bbe-93cfae5ed381';
+	DELETE FROM "location" WHERE id='1319540f-fe94-4f8b-8bbe-93cfae5ed381';
+	DELETE FROM "location" WHERE id='1319540f-fe95-4f8b-8bbe-93cfae5ed381';
+	DELETE FROM "location" WHERE id='1319540f-fe96-4f8b-8bbe-93cfae5ed381';
+	DELETE FROM "location" WHERE id='1319540f-fe97-4f8b-8bbe-93cfae5ed381';
 
 COMMIT;
+
+
+

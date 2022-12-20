@@ -27,6 +27,7 @@ type CategoryServiceClient interface {
 	GetCategoryById(ctx context.Context, in *GetCategoryByIdRequest, opts ...grpc.CallOption) (*Category, error)
 	UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*Category, error)
 	DeleteCategory(ctx context.Context, in *DeleteCategoryRequest, opts ...grpc.CallOption) (*DeleteCategoryResponse, error)
+	EnabledCategory(ctx context.Context, in *EnabledCategoryRequest, opts ...grpc.CallOption) (*EnabledCategoryResponse, error)
 }
 
 type categoryServiceClient struct {
@@ -82,6 +83,15 @@ func (c *categoryServiceClient) DeleteCategory(ctx context.Context, in *DeleteCa
 	return out, nil
 }
 
+func (c *categoryServiceClient) EnabledCategory(ctx context.Context, in *EnabledCategoryRequest, opts ...grpc.CallOption) (*EnabledCategoryResponse, error) {
+	out := new(EnabledCategoryResponse)
+	err := c.cc.Invoke(ctx, "/CategoryService/EnabledCategory", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CategoryServiceServer is the server API for CategoryService service.
 // All implementations must embed UnimplementedCategoryServiceServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type CategoryServiceServer interface {
 	GetCategoryById(context.Context, *GetCategoryByIdRequest) (*Category, error)
 	UpdateCategory(context.Context, *UpdateCategoryRequest) (*Category, error)
 	DeleteCategory(context.Context, *DeleteCategoryRequest) (*DeleteCategoryResponse, error)
+	EnabledCategory(context.Context, *EnabledCategoryRequest) (*EnabledCategoryResponse, error)
 	mustEmbedUnimplementedCategoryServiceServer()
 }
 
@@ -112,6 +123,9 @@ func (UnimplementedCategoryServiceServer) UpdateCategory(context.Context, *Updat
 }
 func (UnimplementedCategoryServiceServer) DeleteCategory(context.Context, *DeleteCategoryRequest) (*DeleteCategoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCategory not implemented")
+}
+func (UnimplementedCategoryServiceServer) EnabledCategory(context.Context, *EnabledCategoryRequest) (*EnabledCategoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EnabledCategory not implemented")
 }
 func (UnimplementedCategoryServiceServer) mustEmbedUnimplementedCategoryServiceServer() {}
 
@@ -216,6 +230,24 @@ func _CategoryService_DeleteCategory_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CategoryService_EnabledCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnabledCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServiceServer).EnabledCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/CategoryService/EnabledCategory",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServiceServer).EnabledCategory(ctx, req.(*EnabledCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CategoryService_ServiceDesc is the grpc.ServiceDesc for CategoryService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +274,10 @@ var CategoryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteCategory",
 			Handler:    _CategoryService_DeleteCategory_Handler,
+		},
+		{
+			MethodName: "EnabledCategory",
+			Handler:    _CategoryService_EnabledCategory_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

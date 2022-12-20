@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type AuthorServiceClient interface {
 	CreateAuthor(ctx context.Context, in *CreateAuthorRequest, opts ...grpc.CallOption) (*Author, error)
 	DeleteAuthor(ctx context.Context, in *DeleteAuthorRequest, opts ...grpc.CallOption) (*DeleteAuthorResponse, error)
+	EnabledAuthor(ctx context.Context, in *EnabledAuthorRequest, opts ...grpc.CallOption) (*EnabledAuthorResponse, error)
 	GetAuthorList(ctx context.Context, in *GetAuthorListRequest, opts ...grpc.CallOption) (*GetAuthorListResponse, error)
 	GetAuthorById(ctx context.Context, in *GetAuthorByIDRequest, opts ...grpc.CallOption) (*Author, error)
 }
@@ -54,6 +55,15 @@ func (c *authorServiceClient) DeleteAuthor(ctx context.Context, in *DeleteAuthor
 	return out, nil
 }
 
+func (c *authorServiceClient) EnabledAuthor(ctx context.Context, in *EnabledAuthorRequest, opts ...grpc.CallOption) (*EnabledAuthorResponse, error) {
+	out := new(EnabledAuthorResponse)
+	err := c.cc.Invoke(ctx, "/AuthorService/EnabledAuthor", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authorServiceClient) GetAuthorList(ctx context.Context, in *GetAuthorListRequest, opts ...grpc.CallOption) (*GetAuthorListResponse, error) {
 	out := new(GetAuthorListResponse)
 	err := c.cc.Invoke(ctx, "/AuthorService/GetAuthorList", in, out, opts...)
@@ -78,6 +88,7 @@ func (c *authorServiceClient) GetAuthorById(ctx context.Context, in *GetAuthorBy
 type AuthorServiceServer interface {
 	CreateAuthor(context.Context, *CreateAuthorRequest) (*Author, error)
 	DeleteAuthor(context.Context, *DeleteAuthorRequest) (*DeleteAuthorResponse, error)
+	EnabledAuthor(context.Context, *EnabledAuthorRequest) (*EnabledAuthorResponse, error)
 	GetAuthorList(context.Context, *GetAuthorListRequest) (*GetAuthorListResponse, error)
 	GetAuthorById(context.Context, *GetAuthorByIDRequest) (*Author, error)
 	mustEmbedUnimplementedAuthorServiceServer()
@@ -92,6 +103,9 @@ func (UnimplementedAuthorServiceServer) CreateAuthor(context.Context, *CreateAut
 }
 func (UnimplementedAuthorServiceServer) DeleteAuthor(context.Context, *DeleteAuthorRequest) (*DeleteAuthorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAuthor not implemented")
+}
+func (UnimplementedAuthorServiceServer) EnabledAuthor(context.Context, *EnabledAuthorRequest) (*EnabledAuthorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EnabledAuthor not implemented")
 }
 func (UnimplementedAuthorServiceServer) GetAuthorList(context.Context, *GetAuthorListRequest) (*GetAuthorListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAuthorList not implemented")
@@ -148,6 +162,24 @@ func _AuthorService_DeleteAuthor_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthorService_EnabledAuthor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnabledAuthorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthorServiceServer).EnabledAuthor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/AuthorService/EnabledAuthor",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthorServiceServer).EnabledAuthor(ctx, req.(*EnabledAuthorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AuthorService_GetAuthorList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetAuthorListRequest)
 	if err := dec(in); err != nil {
@@ -198,6 +230,10 @@ var AuthorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteAuthor",
 			Handler:    _AuthorService_DeleteAuthor_Handler,
+		},
+		{
+			MethodName: "EnabledAuthor",
+			Handler:    _AuthorService_EnabledAuthor_Handler,
 		},
 		{
 			MethodName: "GetAuthorList",

@@ -27,6 +27,7 @@ type LocationServiceClient interface {
 	GetLocationById(ctx context.Context, in *GetLocationByIdRequest, opts ...grpc.CallOption) (*Location, error)
 	UpdateLocation(ctx context.Context, in *UpdateLocationRequest, opts ...grpc.CallOption) (*Location, error)
 	DeleteLocation(ctx context.Context, in *DeleteLocationRequest, opts ...grpc.CallOption) (*DeleteLocationResponse, error)
+	EnabledLocation(ctx context.Context, in *EnabledLocationRequest, opts ...grpc.CallOption) (*EnabledLocationResponse, error)
 }
 
 type locationServiceClient struct {
@@ -82,6 +83,15 @@ func (c *locationServiceClient) DeleteLocation(ctx context.Context, in *DeleteLo
 	return out, nil
 }
 
+func (c *locationServiceClient) EnabledLocation(ctx context.Context, in *EnabledLocationRequest, opts ...grpc.CallOption) (*EnabledLocationResponse, error) {
+	out := new(EnabledLocationResponse)
+	err := c.cc.Invoke(ctx, "/LocationService/EnabledLocation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LocationServiceServer is the server API for LocationService service.
 // All implementations must embed UnimplementedLocationServiceServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type LocationServiceServer interface {
 	GetLocationById(context.Context, *GetLocationByIdRequest) (*Location, error)
 	UpdateLocation(context.Context, *UpdateLocationRequest) (*Location, error)
 	DeleteLocation(context.Context, *DeleteLocationRequest) (*DeleteLocationResponse, error)
+	EnabledLocation(context.Context, *EnabledLocationRequest) (*EnabledLocationResponse, error)
 	mustEmbedUnimplementedLocationServiceServer()
 }
 
@@ -112,6 +123,9 @@ func (UnimplementedLocationServiceServer) UpdateLocation(context.Context, *Updat
 }
 func (UnimplementedLocationServiceServer) DeleteLocation(context.Context, *DeleteLocationRequest) (*DeleteLocationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteLocation not implemented")
+}
+func (UnimplementedLocationServiceServer) EnabledLocation(context.Context, *EnabledLocationRequest) (*EnabledLocationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EnabledLocation not implemented")
 }
 func (UnimplementedLocationServiceServer) mustEmbedUnimplementedLocationServiceServer() {}
 
@@ -216,6 +230,24 @@ func _LocationService_DeleteLocation_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LocationService_EnabledLocation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnabledLocationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LocationServiceServer).EnabledLocation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/LocationService/EnabledLocation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LocationServiceServer).EnabledLocation(ctx, req.(*EnabledLocationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LocationService_ServiceDesc is the grpc.ServiceDesc for LocationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +274,10 @@ var LocationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteLocation",
 			Handler:    _LocationService_DeleteLocation_Handler,
+		},
+		{
+			MethodName: "EnabledLocation",
+			Handler:    _LocationService_EnabledLocation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
