@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS "category" (
 
 CREATE TABLE IF NOT EXISTS "location" (
    "id" CHAR(36) PRIMARY KEY,
-   "name"  varchar(255),
+   "name"  varchar(255) UNIQUE,
    "status" varchar(255) DEFAULT 'enabled',
    "created_at" TIMESTAMP DEFAULT now(),
    "updated_at" TIMESTAMP

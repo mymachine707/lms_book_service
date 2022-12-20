@@ -20,7 +20,6 @@ func (stg Postgres) AddCategory(id string, entity *book_service.CreateCategoryRe
 		id,
 		entity.Title,
 	)
-
 	if err != nil {
 		return err
 	}

@@ -11,7 +11,7 @@ func (stg Postgres) AddLocation(id string, entity *book_service.CreateLocationRe
 
 	_, err := stg.db.Exec(`INSERT INTO "location" (
 		"id",
-		"name",
+		"name"
 		) VALUES(
 		$1,
 		$2
@@ -152,9 +152,9 @@ func (stg Postgres) EnabledLocation(idStr string) error {
 // UpdateLocation ...
 func (stg Postgres) UpdateLocation(location *book_service.UpdateLocationRequest) error {
 
-	rows, err := stg.db.NamedExec(`Update "location" set "title"=:t, "updated_at"=now() Where "id"=:id and "status"='enabled'`, map[string]interface{}{
+	rows, err := stg.db.NamedExec(`Update "location" set "name"=:n, "updated_at"=now() Where "id"=:id and "status"='enabled'`, map[string]interface{}{
 		"id": location.Id,
-		"t":  location.Name,
+		"n":  location.Name,
 	})
 
 	if err != nil {
