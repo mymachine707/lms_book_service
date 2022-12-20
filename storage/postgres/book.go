@@ -162,6 +162,27 @@ func (stg Postgres) DeleteBook(idStr string) error {
 	return errors.New("Cannot delete Book becouse 'status'='disabled'")
 }
 
+// EnabledBook ...
+func (stg Postgres) EnabledBook(idStr string) error {
+	rows, err := stg.db.Exec(`UPDATE "book" SET "updated_at"=now(),"status"='enabled' Where id=$1 and "status"='disabled'`, idStr)
+
+	if err != nil {
+		return err
+	}
+
+	n, err := rows.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if n > 0 {
+		return nil
+	}
+
+	return errors.New("Cannot enabled Book becouse 'status'='enabled'")
+}
+
 // UpdateBook ...
 func (stg Postgres) UpdateBook(book *book_service.UpdateBookRequest) error {
 

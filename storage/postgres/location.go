@@ -128,6 +128,27 @@ func (stg Postgres) DeleteLocation(idStr string) error {
 	return errors.New("Cannot delete Location becouse 'status'='disabled'")
 }
 
+// EnabledLocation ...
+func (stg Postgres) EnabledLocation(idStr string) error {
+	rows, err := stg.db.Exec(`UPDATE "location" SET "updated_at"=now(),"status"='enabled' Where id=$1 and "status"='disabled'`, idStr)
+
+	if err != nil {
+		return err
+	}
+
+	n, err := rows.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if n > 0 {
+		return nil
+	}
+
+	return errors.New("Cannot enabled Location becouse 'status'='enabled'")
+}
+
 // UpdateLocation ...
 func (stg Postgres) UpdateLocation(location *book_service.UpdateLocationRequest) error {
 

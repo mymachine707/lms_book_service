@@ -3,6 +3,11 @@ package main
 import (
 	"fmt"
 	"lms/lms_book_service/config"
+	"lms/lms_book_service/protogen/book_service"
+	"lms/lms_book_service/services/author"
+	"lms/lms_book_service/services/book"
+	"lms/lms_book_service/services/category"
+	"lms/lms_book_service/services/location"
 	"lms/lms_book_service/storage"
 	"lms/lms_book_service/storage/postgres"
 	"log"
@@ -55,11 +60,17 @@ func main() {
 
 	s := grpc.NewServer()
 
-	CategoryService := category.NewCategoryService(stg)
-	eCommerce.RegisterCategoryServiceServer(s, CategoryService)
+	AuthorService := author.NewAuthorService(stg)
+	book_service.RegisterAuthorServiceServer(s, AuthorService)
 
-	ProductService := products.NewProductService(stg)
-	eCommerce.RegisterProductServiceServer(s, ProductService)
+	BookService := book.NewBookService(stg)
+	book_service.RegisterBookServiceServer(s, BookService)
+
+	CategoryService := category.NewCategoryService(stg)
+	book_service.RegisterCategoryServiceServer(s, CategoryService)
+
+	LocationService := location.NewLocationService(stg)
+	book_service.RegisterLocationServiceServer(s, LocationService)
 
 	reflection.Register(s)
 	if err := s.Serve(listener); err != nil {

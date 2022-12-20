@@ -9,12 +9,14 @@ type Interfaces interface {
 	GetAuthorByID(id string) (*book_service.Author, error)
 	GetAuthorList(offset, limit int, search string) (resp *book_service.GetAuthorListResponse, err error)
 	DeleteAuthor(idStr string) error
+	EnabledAuthor(idStr string) error
 
 	// For Book service
 	AddBook(id string, entity *book_service.CreateBookRequest) error
 	GetBookByID(id string) (*book_service.Book, error)
 	GetBookList(offset, limit int, search string) (resp *book_service.GetBookListResponse, err error)
 	DeleteBook(idStr string) error
+	EnabledBook(idStr string) error
 	UpdateBook(book *book_service.UpdateBookRequest) error
 
 	// For Category service
@@ -22,6 +24,7 @@ type Interfaces interface {
 	GetCategoryByID(id string) (*book_service.Category, error)
 	GetCategoryList(offset, limit int, search string) (resp *book_service.GetCategoryListResponse, err error)
 	DeleteCategory(idStr string) error
+	EnabledCategory(idStr string) error
 	UpdateCategory(category *book_service.UpdateCategoryRequest) error
 
 	// For Location service
@@ -29,5 +32,6 @@ type Interfaces interface {
 	GetLocationByID(id string) (*book_service.Location, error)
 	GetLocationList(offset, limit int, search string) (resp *book_service.GetLocationListResponse, err error)
 	DeleteLocation(idStr string) error
+	EnabledLocation(idStr string) error
 	UpdateLocation(location *book_service.UpdateLocationRequest) error
 }

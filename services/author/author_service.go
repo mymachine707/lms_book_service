@@ -1,128 +1,111 @@
-package category
+package author
 
 import (
 	"context"
 	"fmt"
-	"log"
-
-	"mymachine707/protogen/eCommerce"
-	"mymachine707/storage"
+	"lms/lms_book_service/protogen/book_service"
+	"lms/lms_book_service/storage"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-type categoryService struct {
+type authorService struct {
 	stg storage.Interfaces
-	eCommerce.UnimplementedCategoryServiceServer
+	book_service.UnimplementedAuthorServiceServer
 }
 
-func NewCategoryService(stg storage.Interfaces) *categoryService {
-	return &categoryService{
+func NewAuthorService(stg storage.Interfaces) *authorService {
+	return &authorService{
 		stg: stg,
 	}
 }
-func (s *categoryService) Ping(ctx context.Context, req *eCommerce.Empty) (*eCommerce.Pong, error) {
-	fmt.Println("<<< ---- Ping ---->>>")
-	log.Println("Ping")
-	return &eCommerce.Pong{
-		Message: "Ok",
-	}, nil
-}
 
-func (s *categoryService) CreateCategory(ctx context.Context, req *eCommerce.CreateCategoryRequest) (*eCommerce.Category, error) {
-	fmt.Println("<<< ---- CreateCategory ---->>>")
+func (s *authorService) CreateAuthor(ctx context.Context, req *book_service.CreateAuthorRequest) (*book_service.Author, error) {
+	fmt.Println("<<< ---- CreateAuthor ---->>>")
 
 	id := uuid.New()
 
-	err := s.stg.AddCategory(id.String(), req)
+	err := s.stg.AddAuthor(id.String(), req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.AddCategory: %s", err)
+		return nil, status.Errorf(codes.Internal, "s.stg.AddAuthor: %s", err)
 	}
 
-	category, err := s.stg.GetCategoryByID(id.String()) // maqsad tekshirish rostan  ham create bo'ldimi?
+	author, err := s.stg.GetAuthorByID(id.String())
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetCategoryByID: %s", err)
+		return nil, status.Errorf(codes.Internal, "s.stg.GetAuthorByID: %s", err)
 	}
 
-	return &eCommerce.Category{
-		Id:           category.Id,
-		CategoryName: category.CategoryName,
-		Description:  category.Description,
-		CreatedAt:    category.CreatedAt,
-		UpdatedAt:    category.UpdatedAt,
+	return &book_service.Author{
+		Id:        author.Id,
+		Name:      author.Name,
+		Status:    author.Status,
+		CreatedAt: author.CreatedAt,
+		UpdatedAt: author.UpdatedAt,
 	}, nil
 }
 
-func (s *categoryService) UpdateCategory(ctx context.Context, req *eCommerce.UpdateCategoryRequest) (*eCommerce.Category, error) {
-	fmt.Println("<<< ---- UpdateCategory ---->>>")
+func (s *authorService) DeleteAuthor(ctx context.Context, req *book_service.DeleteAuthorRequest) (*book_service.DeleteAuthorResponse, error) {
+	fmt.Println("<<< ---- DeleteAuthor ---->>>")
 
-	err := s.stg.UpdateCategory(req)
+	author, err := s.stg.GetAuthorByID(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.UpdateCategory: %s", err)
+		return nil, status.Errorf(codes.Internal, "s.stg.GetAuthorByID: %s", err)
 	}
 
-	category, err := s.stg.GetCategoryByID(req.Id)
+	err = s.stg.DeleteAuthor(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetCategoryByID: %s", err)
+		return nil, status.Errorf(codes.Internal, "s.stg.DeleteAuthor: %s", err)
 	}
 
-	return &eCommerce.Category{
-		Id:           category.Id,
-		CategoryName: category.CategoryName,
-		Description:  category.Description,
-		CreatedAt:    category.CreatedAt,
-		UpdatedAt:    category.UpdatedAt,
+	return &book_service.DeleteAuthorResponse{
+		Status: author.Status,
 	}, nil
 }
 
-func (s *categoryService) DeleteCategory(ctx context.Context, req *eCommerce.DeleteCategoryRequest) (*eCommerce.Category, error) {
-	fmt.Println("<<< ---- DeleteCategory ---->>>")
+func (s *authorService) EnabledAuthor(ctx context.Context, req *book_service.EnabledAuthorRequest) (*book_service.EnabledAuthorResponse, error) {
+	fmt.Println("<<< ---- EnabledAuthor ---->>>")
 
-	category, err := s.stg.GetCategoryByID(req.Id) // maqsad tekshirish rostan  ham create bo'ldimi?
+	author, err := s.stg.GetAuthorByID(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetCategoryByID: %s", err)
+		return nil, status.Errorf(codes.Internal, "s.stg.GetAuthorByID: %s", err)
 	}
 
-	err = s.stg.DeleteCategory(req.Id)
+	err = s.stg.EnabledAuthor(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.DeleteCategory: %s", err)
+		return nil, status.Errorf(codes.Internal, "s.stg.EnabledAuthor: %s", err)
 	}
 
-	return &eCommerce.Category{
-		Id:           category.Id,
-		CategoryName: category.CategoryName,
-		Description:  category.Description,
-		CreatedAt:    category.CreatedAt,
-		UpdatedAt:    category.UpdatedAt,
+	return &book_service.EnabledAuthorResponse{
+		Status: author.Status,
 	}, nil
 }
 
-func (s *categoryService) GetCategoryList(ctx context.Context, req *eCommerce.GetCategoryListRequest) (*eCommerce.GetCategoryListResponse, error) {
-	fmt.Println("<<< ---- GetCategoryList ---->>>")
+func (s *authorService) GetAuthorList(ctx context.Context, req *book_service.GetAuthorListRequest) (*book_service.GetAuthorListResponse, error) {
+	fmt.Println("<<< ---- GetAuthorList ---->>>")
 
-	res, err := s.stg.GetCategoryList(int(req.Offset), int(req.Limit), req.Search)
+	res, err := s.stg.GetAuthorList(int(req.Offset), int(req.Limit), req.Search)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetCategoryList: %s", err)
+		return nil, status.Errorf(codes.Internal, "s.stg.GetAuthorList: %s", err)
 	}
 
 	return res, nil
 }
 
-func (s *categoryService) GetCategoryById(ctx context.Context, req *eCommerce.GetCategoryByIDRequest) (*eCommerce.Category, error) {
-	fmt.Println("<<< ---- GetCategoryById ---->>>")
+func (s *authorService) GetAuthorById(ctx context.Context, req *book_service.GetAuthorByIDRequest) (*book_service.Author, error) {
+	fmt.Println("<<< ---- GetAuthorById ---->>>")
 
-	category, err := s.stg.GetCategoryByID(req.Id)
+	author, err := s.stg.GetAuthorByID(req.Id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.GetCategoryByID: %s", err)
+		return nil, status.Errorf(codes.Internal, "s.stg.GetAuthorByID: %s", err)
 	}
 
-	return &eCommerce.Category{
-		Id:           category.Id,
-		CategoryName: category.CategoryName,
-		Description:  category.Description,
-		CreatedAt:    category.CreatedAt,
-		UpdatedAt:    category.UpdatedAt,
+	return &book_service.Author{
+		Id:        author.Id,
+		Name:      author.Name,
+		Status:    author.Status,
+		CreatedAt: author.CreatedAt,
+		UpdatedAt: author.UpdatedAt,
 	}, nil
 }

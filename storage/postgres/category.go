@@ -128,6 +128,27 @@ func (stg Postgres) DeleteCategory(idStr string) error {
 	return errors.New("Cannot delete Category becouse 'status'='disabled'")
 }
 
+// EnabledCategory ...
+func (stg Postgres) EnabledCategory(idStr string) error {
+	rows, err := stg.db.Exec(`UPDATE "category" SET "updated_at"=now(),"status"='enabled' Where id=$1 and "status"='disabled'`, idStr)
+
+	if err != nil {
+		return err
+	}
+
+	n, err := rows.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if n > 0 {
+		return nil
+	}
+
+	return errors.New("Cannot enabled Category becouse 'status'='enabled'")
+}
+
 // UpdateCategory ...
 func (stg Postgres) UpdateCategory(category *book_service.UpdateCategoryRequest) error {
 

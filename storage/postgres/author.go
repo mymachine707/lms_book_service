@@ -129,3 +129,24 @@ func (stg Postgres) DeleteAuthor(idStr string) error {
 
 	return errors.New("Cannot delete Author becouse 'status'='disabled'")
 }
+
+// EnabledAuthor ...
+func (stg Postgres) EnabledAuthor(idStr string) error {
+	rows, err := stg.db.Exec(`UPDATE "author" SET "updated_at"=now(),"status"='enabled' Where id=$1 and "status"='disabled'`, idStr)
+
+	if err != nil {
+		return err
+	}
+
+	n, err := rows.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if n > 0 {
+		return nil
+	}
+
+	return errors.New("Cannot enabled Author becouse 'status'='enabled'")
+}
