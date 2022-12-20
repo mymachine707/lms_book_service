@@ -101,7 +101,7 @@ func (stg Postgres) GetBookList(offset, limit int, search string) (resp *book_se
 		"created_at",
 		"updated_at"
  		from "book" WHERE 
- 		(("name" ILIKE '%' || $1 || '%')
+ 		("name" ILIKE '%' || $1 || '%')
  		LIMIT $2 
 		OFFSET $3`, search, limit, offset)
 

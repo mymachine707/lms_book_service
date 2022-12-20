@@ -72,7 +72,7 @@ func (stg Postgres) GetLocationList(offset, limit int, search string) (resp *boo
 		"created_at",
 		"updated_at"
  		from "location" WHERE 
- 		(("name" ILIKE '%' || $1 || '%')
+ 		("name" ILIKE '%' || $1 || '%')
  		LIMIT $2 
 		OFFSET $3`, search, limit, offset)
 
