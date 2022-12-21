@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"errors"
-	"fmt"
 	"lms/lms_book_service/protogen/book_service"
 	"time"
 )
@@ -43,7 +42,7 @@ func (stg Postgres) GetCategoryByID(id string) (*book_service.Category, error) {
 		&result.Id,
 		&result.Title,
 		&result.Status,
-		&result.CreatedAt,
+		&result.CreatedAt, // !
 		&updatedAt,
 	)
 
@@ -62,7 +61,7 @@ func (stg Postgres) GetCategoryByID(id string) (*book_service.Category, error) {
 func (stg Postgres) GetCategoryList(offset, limit int, search string) (resp *book_service.GetCategoryListResponse, err error) {
 
 	resp = &book_service.GetCategoryListResponse{
-		Categories: make([]*book_service.Category, 0),
+		Category: make([]*book_service.Category, 0),
 	}
 
 	rows, err := stg.db.Queryx(`
@@ -92,7 +91,7 @@ func (stg Postgres) GetCategoryList(offset, limit int, search string) (resp *boo
 			&a.CreatedAt,
 			&updatedAt,
 		)
-		fmt.Println(a)
+
 		if updatedAt != nil {
 			a.UpdatedAt = *updatedAt
 		}
@@ -101,7 +100,7 @@ func (stg Postgres) GetCategoryList(offset, limit int, search string) (resp *boo
 			return resp, err
 		}
 
-		resp.Categories = append(resp.Categories, a)
+		resp.Category = append(resp.Category, a)
 
 	}
 
@@ -153,9 +152,9 @@ func (stg Postgres) EnabledCategory(idStr string) error {
 // UpdateCategory ...
 func (stg Postgres) UpdateCategory(category *book_service.UpdateCategoryRequest) error {
 
-	rows, err := stg.db.NamedExec(`Update "category" set "title"=:t, "updated_at"=now() Where "id"=:id and "status"='enabled'`, map[string]interface{}{
+	rows, err := stg.db.NamedExec(`Update "category" set "title"=:n, "updated_at"=now() Where "id"=:id and "status"='enabled'`, map[string]interface{}{
 		"id": category.Id,
-		"t":  category.Title,
+		"n":  category.Title,
 	})
 
 	if err != nil {

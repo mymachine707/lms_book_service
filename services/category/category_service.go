@@ -26,7 +26,7 @@ func (s *categoryService) CreateCategory(ctx context.Context, req *book_service.
 	fmt.Println("<<< ---- CreateCategory ---->>>")
 
 	id := uuid.New()
-
+	fmt.Println(req.Title)
 	err := s.stg.AddCategory(id.String(), req)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "s.stg.AddCategory: %s", err)
