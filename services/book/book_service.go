@@ -93,14 +93,14 @@ func (s *bookService) DeleteBook(ctx context.Context, req *book_service.DeleteBo
 func (s *bookService) EnabledBook(ctx context.Context, req *book_service.EnabledBookRequest) (*book_service.EnabledBookResponse, error) {
 	fmt.Println("<<< ---- EnabledBook ---->>>")
 
+	err := s.stg.EnabledBook(req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "s.stg.EnabledBook: %s", err)
+	}
+
 	book, err := s.stg.GetBookByID(req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "s.stg.GetBookByID: %s", err)
-	}
-
-	err = s.stg.EnabledBook(req.Id)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.EnabledBook: %s", err)
 	}
 
 	return &book_service.EnabledBookResponse{

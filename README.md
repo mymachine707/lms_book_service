@@ -6,3 +6,10 @@
     git pull
     cd ..
     ./genproto.sh
+
+
+    category list ishlamiyapti get qiganda ma'lumotla kemiyapti to'g'irlash kere
+
+    Author CRUD ishlavotti bloomRPC dan tekshirildi
+    Location CRUD ishlavotti bloomRPC dan tekshirildi
+    Book CRUD ishlavotti bloomRPC dan tekshirildi

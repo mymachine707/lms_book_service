@@ -67,14 +67,14 @@ func (s *authorService) DeleteAuthor(ctx context.Context, req *book_service.Dele
 func (s *authorService) EnabledAuthor(ctx context.Context, req *book_service.EnabledAuthorRequest) (*book_service.EnabledAuthorResponse, error) {
 	fmt.Println("<<< ---- EnabledAuthor ---->>>")
 
+	err := s.stg.EnabledAuthor(req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "s.stg.EnabledAuthor: %s", err)
+	}
+
 	author, err := s.stg.GetAuthorByID(req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "s.stg.GetAuthorByID: %s", err)
-	}
-
-	err = s.stg.EnabledAuthor(req.Id)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.EnabledAuthor: %s", err)
 	}
 
 	return &book_service.EnabledAuthorResponse{

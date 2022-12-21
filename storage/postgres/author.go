@@ -13,11 +13,10 @@ func (stg Postgres) AddAuthor(id string, entity *book_service.CreateAuthorReques
 
 	_, err = stg.db.Exec(`INSERT INTO "author" (
 		"id",
-		"name",
-		) VALUES(
+		"name"
+		) VALUES (
 		$1,
-		$2
-	)`,
+		$2 )`,
 		id,
 		entity.Name,
 	)
