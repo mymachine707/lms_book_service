@@ -89,14 +89,14 @@ func (s *locationService) DeleteLocation(ctx context.Context, req *book_service.
 func (s *locationService) EnabledLocation(ctx context.Context, req *book_service.EnabledLocationRequest) (*book_service.EnabledLocationResponse, error) {
 	fmt.Println("<<< ---- EnabledLocation ---->>>")
 
+	err := s.stg.EnabledLocation(req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "s.stg.EnabledLocation: %s", err)
+	}
+
 	location, err := s.stg.GetLocationByID(req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "s.stg.GetLocationByID: %s", err)
-	}
-
-	err = s.stg.EnabledLocation(req.Id)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.EnabledLocation: %s", err)
 	}
 
 	return &book_service.EnabledLocationResponse{
