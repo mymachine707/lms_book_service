@@ -25,7 +25,7 @@ INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe94-4f8b-8bbe-93cfae5ed
 INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe95-4f8b-8bbe-93cfae5ed381', 'E1') ON CONFLICT DO NOTHING;
 INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe96-4f8b-8bbe-93cfae5ed381', 'F1') ON CONFLICT DO NOTHING;
 INSERT INTO "location" ("id", "name") VALUES ('1319540f-fe97-4f8b-8bbe-93cfae5ed381', 'G1') ON CONFLICT DO NOTHING;
-COMMIT;
+
 
 INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "ISBN", "quantity") VALUES 
 (
@@ -59,15 +59,4 @@ INSERT INTO "book" ("id", "name", "author_id", "category_id", "location_id", "IS
 (
 	'433d6ba4-3d1d-4256-80d7-830bd6b30cc8', 'In Search of Lost Time', 'b9a39905-d3d4-4025-8905-27aa625a1aef', '4b19a81c-f4b5-482b-bcc4-7d577a5cfd50', '1319540f-fe97-4f8b-8bbe-93cfae5ed381',123,10);
 
-
--- Anna Karenina by Leo Tolstoy. // Realist novel
--- Madame Bovary by Gustav Flaubert. // Realist novel
--- War and Peace by Leo Tolstoy. // roman epopeya
--- Lolita by Vladimir Nabokov. // novel
--- The Adventures of Huckleberry Finn by Mark Twain. //  Picaresque novel
--- Hamlet by William Shakespeare. // Shakespearean tragedy
--- The Great Gatsby by F. Scott Fizgerald. //  Tragedy
--- In Search of Lost Time by Marcel Proust // Modernist
-
-
-Select "id","name",	"status","created_at","updated_at" from "author" ('name' ILIKE '%' || 'l' || '%')	LIMIT $2 OFFSET $3 ;
+COMMIT;
