@@ -125,7 +125,7 @@ func (stg Postgres) DeleteLocation(idStr string) error {
 		return nil
 	}
 
-	return errors.New("Cannot delete Location becouse 'status'='disabled'")
+	return errors.New("cannot delete Location becouse 'status'='disabled'")
 }
 
 // EnabledLocation ...
@@ -146,7 +146,7 @@ func (stg Postgres) EnabledLocation(idStr string) error {
 		return nil
 	}
 
-	return errors.New("Cannot enabled Location becouse 'status'='enabled'")
+	return errors.New("cannot enabled Location becouse 'status'='enabled'")
 }
 
 // UpdateLocation ...
@@ -171,5 +171,5 @@ func (stg Postgres) UpdateLocation(location *book_service.UpdateLocationRequest)
 		return nil
 	}
 
-	return errors.New("Cannot update Location becouse 'status'='disabled'")
+	return errors.New("cannot update Location becouse 'status'='disabled'")
 }

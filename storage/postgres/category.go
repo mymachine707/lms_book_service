@@ -125,7 +125,7 @@ func (stg Postgres) DeleteCategory(idStr string) error {
 		return nil
 	}
 
-	return errors.New("Cannot delete Category becouse 'status'='disabled'")
+	return errors.New("cannot delete Category becouse 'status'='disabled'")
 }
 
 // EnabledCategory ...
@@ -146,7 +146,7 @@ func (stg Postgres) EnabledCategory(idStr string) error {
 		return nil
 	}
 
-	return errors.New("Cannot enabled Category becouse 'status'='enabled'")
+	return errors.New("cannot enabled Category becouse 'status'='enabled'")
 }
 
 // UpdateCategory ...
@@ -171,5 +171,5 @@ func (stg Postgres) UpdateCategory(category *book_service.UpdateCategoryRequest)
 		return nil
 	}
 
-	return errors.New("Cannot update Category becouse 'status'='disabled'")
+	return errors.New("cannot update Category becouse 'status'='disabled'")
 }
