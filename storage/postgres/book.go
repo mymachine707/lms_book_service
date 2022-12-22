@@ -160,7 +160,7 @@ func (stg Postgres) DeleteBook(idStr string) error {
 		return nil
 	}
 
-	return errors.New("Cannot delete Book becouse 'status'='disabled'")
+	return errors.New("cannot delete Book becouse 'status'='disabled'")
 }
 
 // EnabledBook ...
@@ -181,7 +181,7 @@ func (stg Postgres) EnabledBook(idStr string) error {
 		return nil
 	}
 
-	return errors.New("Cannot enabled Book becouse 'status'='enabled'")
+	return errors.New("cannot enabled Book becouse 'status'='enabled'")
 }
 
 // UpdateBook ...
@@ -207,5 +207,5 @@ func (stg Postgres) UpdateBook(book *book_service.UpdateBookRequest) error {
 		return nil
 	}
 
-	return errors.New("Cannot update Book becouse 'status'='disabled'")
+	return errors.New("cannot update Book becouse 'status'='disabled'")
 }

@@ -127,7 +127,7 @@ func (stg Postgres) DeleteAuthor(idStr string) error {
 		return nil
 	}
 
-	return errors.New("Cannot delete Author becouse 'status'='disabled'")
+	return errors.New("cannot delete Author becouse 'status'='disabled'")
 }
 
 // EnabledAuthor ...
@@ -148,5 +148,5 @@ func (stg Postgres) EnabledAuthor(idStr string) error {
 		return nil
 	}
 
-	return errors.New("Cannot enabled Author becouse 'status'='enabled'")
+	return errors.New("cannot enabled Author becouse 'status'='enabled'")
 }
