@@ -26,7 +26,7 @@ func (s *categoryService) CreateCategory(ctx context.Context, req *book_service.
 	fmt.Println("<<< ---- CreateCategory ---->>>")
 
 	id := uuid.New()
-
+	fmt.Println(req.Title)
 	err := s.stg.AddCategory(id.String(), req)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "s.stg.AddCategory: %s", err)
@@ -89,14 +89,13 @@ func (s *categoryService) DeleteCategory(ctx context.Context, req *book_service.
 func (s *categoryService) EnabledCategory(ctx context.Context, req *book_service.EnabledCategoryRequest) (*book_service.EnabledCategoryResponse, error) {
 	fmt.Println("<<< ---- EnabledCategory ---->>>")
 
+	err := s.stg.EnabledCategory(req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "s.stg.EnabledCategory: %s", err)
+	}
 	category, err := s.stg.GetCategoryByID(req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "s.stg.GetCategoryByID: %s", err)
-	}
-
-	err = s.stg.EnabledCategory(req.Id)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "s.stg.EnabledCategory: %s", err)
 	}
 
 	return &book_service.EnabledCategoryResponse{

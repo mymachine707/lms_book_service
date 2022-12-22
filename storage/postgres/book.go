@@ -65,6 +65,7 @@ func (stg Postgres) GetBookByID(id string) (*book_service.Book, error) {
 		&result.CategoryId,
 		&result.LocationId,
 		&result.ISBN,
+		&result.Quantity,
 		&result.Status,
 		&result.CreatedAt, // !
 		&updatedAt,
